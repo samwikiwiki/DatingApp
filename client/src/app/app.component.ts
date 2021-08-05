@@ -1,5 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { User } from './_models/user';
+import { AccountService } from './_services/account.service';
 
 @Component({
   selector: 'app-root',
@@ -9,16 +11,21 @@ import { Component, OnInit } from '@angular/core';
 export class AppComponent implements OnInit{
   title = 'client';
   palabro = 'ola k ase';
-
+  logueado: boolean;
   users : any //any es para almacenar cualquier tipo de dato en ts (string, int...)
 
-  constructor (private http: HttpClient){}
+  constructor (private accountService: AccountService){}
 
   ngOnInit() {
-    this.http.get('https://localhost:5001/api/users').subscribe(response =>{
-      this.users = response;
-    }, error =>{
-      console.log(error);
-    })
+    
+    this.setCurrentUser();
   }
+
+  setCurrentUser(){
+    const user:User = JSON.parse(localStorage.getItem('user'));
+    this.accountService.setCurrentUser(user);
+  }
+
+  
+  
 }
